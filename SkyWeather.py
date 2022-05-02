@@ -74,9 +74,9 @@ import SDL_Pi_HDC1000
 from apscheduler.schedulers.background import BackgroundScheduler
 import apscheduler.events
 if (config.enable_MySQL_Logging == True):
-    import pymysql
-    pymysql.install_as_MySQLdb()
+    
     import MySQLdb as mdb
+
 # import picamera
 # import SkyCamera
 import DustSensor
@@ -1245,7 +1245,7 @@ def writeWeatherRecord():
 
     try:
         print("trying database")
-        con = mdb.connect(config.MySQL_Address, config.MySQL_User, config.MySQL_Password, config.MySQL_Database);
+        con = mdb.connect('localhost', 'root', config.MySQL_Password, 'SkyWeather');
         cur = con.cursor()
         print("Connected to database:")
         #query = 'INSERT INTO WeatherData(TimeStamp,as3935LightningCount, as3935LastInterrupt, as3935LastDistance, as3935LastStatus, currentWindSpeed, currentWindGust, totalRain,  bmp180Temperature, bmp180Pressure, bmp180Altitude,  bmp180SeaLevel,  outsideTemperature, outsideHumidity, currentWindDirection, currentWindDirectionVoltage, insideTemperature, insideHumidity, AQI) VALUES(UTC_TIMESTAMP(), %.3f, %.3f, %.3f, "%s", %.3f, %.3f, %.3f, %i, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f)' % (as3935LightningCount, as3935LastInterrupt, as3935LastDistance, as3935LastStatus, currentWindSpeed, currentWindGust, totalRain,  bmp180Temperature, bmp180Pressure, bmp180Altitude,  bmp180SeaLevel,  outsideTemperature, outsideHumidity, currentWindDirection, currentWindDirectionVoltage, HTUtemperature, HTUhumidity, state.Outdoor_AirQuality_Sensor_Value)
@@ -1284,7 +1284,7 @@ def writePowerRecord():
 
     try:
         print("trying database")
-        con = mdb.connect(config.MySQL_Address, config.MySQL_User, config.MySQL_Password, config.MySQL_Database2)
+        con = mdb.connect('localhost', 'root', config.MySQL_Password, 'SkyWeather');
         cur = con.cursor()
         print ("before query")
         if (config.SolarMAX_Present == True):

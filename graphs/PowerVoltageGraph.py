@@ -44,7 +44,7 @@ def  PowerVoltageGraph(source,days,delay):
 
     try:
         print("trying database")
-        db = mdb.connect(config.MySQL_Address, config.MySQL_User, config.MySQL_Password, config.MySQL_Database);
+        db = mdb.connect('localhost', 'root', config.MySQL_Password, 'SkyWeather');
         cursor = db.cursor()
         query = "SELECT TimeStamp, solarVoltage, batteryVoltage, loadVoltage FROM PowerSystem where  now() - interval %i hour < TimeStamp" % (days*24)
         cursor.execute(query)

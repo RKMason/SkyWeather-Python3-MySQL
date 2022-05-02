@@ -45,9 +45,9 @@ def  BarometerLightningGraph(source,days,delay):
 
     try:
         print("trying database")
-        db = mdb.connect(config.MySQL_Address, config.MySQL_User, config.MySQL_Password, config.MySQL_Database);
+        db = mdb.connect('localhost', 'root', config.MySQL_Password, 'SkyWeather');
         cursor = db.cursor()
-        query = "SELECT T, TT, T1, T2 FROM Tanks_Log where  now() - interval %i hour < T" % (days*24)
+        query = "SELECT TimeStamp, bmp180SeaLevel, as3935LastInterrupt, as3935LastDistance FROM WeatherData where  now() - interval %i hour < TimeStamp" % (days*24)
         print ("query=", query)
         cursor.execute(query)
         result = cursor.fetchall()

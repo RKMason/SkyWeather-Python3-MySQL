@@ -27,8 +27,7 @@ except ImportError:
         import config
 
 if (config.enable_MySQL_Logging == True):
-    import pymysql
-    pymysql.install_as_MySQLdb()
+    
     import MySQLdb as mdb
 
 
@@ -51,8 +50,7 @@ def log(level, source, message):
         try:
     
                 #print("trying database")
-                con = mdb.connect(config.MySQL_Address, config.MySQL_User, config.MySQL_Password, config.MySQL_Database2);
-
+                con = mdb.connect('localhost', 'root', config.MySQL_Password, 'SkyWeather');
                 cur = con.cursor()
                 #print "before query"
 

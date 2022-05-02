@@ -42,7 +42,7 @@ def  TemperatureHumidityGraph(source,days,delay):
 
     try:
         print("trying database")
-        db = mdb.connect(config.MySQL_Address, config.MySQL_User, config.MySQL_Password, config.MySQL_Database);
+        db = mdb.connect('localhost', 'root', config.MySQL_Password, 'SkyWeather');
         cursor = db.cursor()
         query = "SELECT TimeStamp, bmp180Temperature,  outsideTemperature, outsideHumidity, insideHumidity FROM WeatherData where  now() - interval %i hour < TimeStamp" % (days*24)
         print ("query=", query)
