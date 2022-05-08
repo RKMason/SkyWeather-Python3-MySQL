@@ -6,7 +6,7 @@ Labs original MySQL database code. My system also includes the PiWeatherboard V1
 support for it is included. 
 
  The Python 3 port by ve3sjk supports the following list of sensors. My SkyWeather hardware system uses a subset of
- this list as marked by a * (plus the added TCA9545 I2C Mux) .  
+ this sensor list as marked by a * (plus I added Python3 support for the TCA9545 I2C Mux) .  
 
 - Currently operating with these sensors:
 
@@ -42,6 +42,7 @@ support for it is included.
 - To setup your PiOS follow the GitHub "switchdoclabs/SDL_Pi_SkyWeather" Readme instructions, but instead install Python 3
 - versions of each of the PiOS Python support utilities (typically named "Python3-xxxx"). When installing the Adafruit Python
 - device utilities you will see warnings about using deprecated install processes, but the install processes did work.
+- Obviously, you should git clone this SkyWeather-Python3-MySQL repository instead of the original SDL version. 
 
  
 
