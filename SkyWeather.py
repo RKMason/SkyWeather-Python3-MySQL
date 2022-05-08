@@ -481,10 +481,12 @@ try:
     bme680 = BME680.BME680(BME680.I2C_ADDR_SECONDARY)
     config.BME680_Present = True
     BME680_Functions.setup_bme680(bme680)
+    time.sleep(1)
 
 except IOError as e:
     print ("I/O error({0}): {1}".format(e.errno, e.strerror))
     config.BME680_Present = False
+
 
 
 
@@ -493,9 +495,14 @@ except IOError as e:
     ###########################
 
 try:
+    # turn I2CBus 1 on
+    tca9545.write_control_register(TCA9545_CONFIG_BUS0)
+
     RST =27
     display = Adafruit_SSD1306.SSD1306_128_64(rst=RST, i2c_address=0x3C)
-    # Initialize library.
+    
+    # Initialize library
+
     display.begin()
     display.clear()
     display.display()
@@ -507,6 +514,9 @@ except:
 
 def initializeOLED():
     try:
+        # turn I2CBus 1 on
+        tca9545.write_control_register(TCA9545_CONFIG_BUS0)
+
         RST =27
         display = Adafruit_SSD1306.SSD1306_128_64(rst=RST, i2c_address=0x3C)
         # Initialize library.
@@ -892,9 +902,17 @@ def sampleWeather():
         try:
             data = bme680.get_sensor_data()
             bmp180Temperature = bme680.data.temperature
+            print ("Inside Temp = %0.1f C" % bmp180Temperature)
+            print ("Outside Temp = %0.1f C" % outsideTemperature)
+
             bmp180Humidity = bme680.data.humidity
+            print ("Inside Humidity = %0.1f %%" % bmp180Humidity)
+            print ("Outside Humidity = %0.1f %%" % outsideHumidity)
+
             bmp180Pressure = bme680.data.pressure
-            bmp180Altitude = config.BMP280_Altitude_Meters 
+            print ("Inside Pressure = %0.1f kPa" % bmp180Pressure)
+
+            bmp180Altitude = config.BMP280_Altitude_Meters
             bmp180SeaLevel = BME680_Functions.getSeaLevelPressure(config.BMP280_Altitude_Meters, bmp180Pressure)
             # reset read pressure to Sea Level
             #bmp180Pressure = bmp180SeaLevel 
@@ -1248,26 +1266,33 @@ def writeWeatherRecord():
         con = mdb.connect('localhost', 'root', config.MySQL_Password, 'SkyWeather');
         cur = con.cursor()
         print("Connected to database:")
-        #query = 'INSERT INTO WeatherData(TimeStamp,as3935LightningCount, as3935LastInterrupt, as3935LastDistance, as3935LastStatus, currentWindSpeed, currentWindGust, totalRain,  bmp180Temperature, bmp180Pressure, bmp180Altitude,  bmp180SeaLevel,  outsideTemperature, outsideHumidity, currentWindDirection, currentWindDirectionVoltage, insideTemperature, insideHumidity, AQI) VALUES(UTC_TIMESTAMP(), %.3f, %.3f, %.3f, "%s", %.3f, %.3f, %.3f, %i, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f)' % (as3935LightningCount, as3935LastInterrupt, as3935LastDistance, as3935LastStatus, currentWindSpeed, currentWindGust, totalRain,  bmp180Temperature, bmp180Pressure, bmp180Altitude,  bmp180SeaLevel,  outsideTemperature, outsideHumidity, currentWindDirection, currentWindDirectionVoltage, HTUtemperature, HTUhumidity, state.Outdoor_AirQuality_Sensor_Value)
-        # query = 'INSERT INTO Tanks_Log(T, TT, T1, T2, T3, T4 ) VALUES (CURRENT_TIMESTAMP,%.2f, %.2f, %.2f, % d, % 2f)' % ((((bmp180SeaLevel) * 0.2953)/10.0), ((32.0+1.8*state.currentOutsideTemperature)), state.currentOutsideHumidity, SunlightVisible, state.currentSunlightIR)
-        #query = 'INSERT INTO WeatherData(TimeStamp, as3935LightningCount, as3935LastInterrupt, as3935LastDistance, as3935LastStatus, currentWindSpeed, currentWindGust, totalRain,  bmp180Temperature, bmp180Pressure, bmp180Altitude,  bmp180SeaLevel, OutsideTemperature, OutsideHumidity, currentWindDirection, currentWindDirectionVoltage, insideTemperature, insideHumidity, AQI) VALUES(UTC_TIMESTAMP(), %.3f, %.3f, %.3f, "%s", %.3f, %.3f, %.3f, %i, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f)' % (as3935LightningCount, as3935LastInterrupt, as3935LastDistance, as3935LastStatus, state.ScurrentWindSpeed, state.ScurrentWindGust, state.currentTotalRain,  state.currentInsideTemperature, state.currentBarometricPressure, state.currentAltitude,  state.currentSeaLevel,  state.currentOutsideTemperature, state.currentOutsideHumidity, state.ScurrentWindDirection, currentWindDirectionVoltage, state.currentInsideTemperature, state.currentInsideHumidity, state.Outdoor_AirQuality_Sensor_Value)
-        # if (config.MySQL_debug == True):
-            # print("query=%s" % query)
-        # cur.execute(query)
+
+        query = 'INSERT INTO WeatherData(TimeStamp,as3935LightningCount, as3935LastInterrupt, as3935LastDistance, as3935LastStatus, currentWindSpeed, currentWindGust, totalRain,  bmp180Temperature, bmp180Pressure, bmp180Altitude,  bmp180SeaLevel,  outsideTemperature, outsideHumidity, currentWindDirection, currentWindDirectionVoltage, insideTemperature, insideHumidity, AQI) VALUES(UTC_TIMESTAMP(), %.3f, %.3f, %.3f, "%s", %.3f, %.3f, %.3f, %i, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f, %.3f)' % (as3935LightningCount, as3935LastInterrupt, as3935LastDistance, as3935LastStatus, currentWindSpeed, currentWindGust, totalRain,  bmp180Temperature, bmp180Pressure, bmp180Altitude,  bmp180SeaLevel,  outsideTemperature, outsideHumidity, currentWindDirection, currentWindDirectionVoltage, HTUtemperature, HTUhumidity, state.Outdoor_AirQuality_Sensor_Value)
+                
+        if (config.MySQL_debug == True):
+            print("query=%s" % query)
+            cur.execute(query)
+
         # now check for TSL2591 Sensor
         if (config.TSL2591_Present):
-            #query = 'INSERT INTO Sunlight(TimeStamp, Visible, IR, UV, UVIndex) VALUES(UTC_TIMESTAMP(), %d, %d, %d, %.3f)' % (SunlightVisible, SunlightIR, SunlightUV, SunlightUVIndex)
-            query = 'INSERT INTO Tanks_Log(T, TT, T1, T2, T3, T4 ) VALUES (CURRENT_TIMESTAMP,%.2f, %.2f, %.2f, %.2f, %.2f)' % ((((bmp180SeaLevel) * 0.2953)/10.0), ((32.0+1.8*state.currentOutsideTemperature)), state.currentOutsideHumidity, SunlightVisible, state.currentSunlightIR)            
-            if (config.MySQL_debug == True):
-                print("query=%s" % query)
+
+            query = 'INSERT INTO Sunlight(TimeStamp, Visible, IR, UV, UVIndex) VALUES(UTC_TIMESTAMP(), %d, %d, %d, %.3f)' % (SunlightVisible, SunlightIR, SunlightUV, SunlightUVIndex)
+            
+        if ((config.TSL2591_Present == True) and (config.MySQL_debug == True)):
+            print("query=%s" % query)
             cur.execute(query)
+
         # now check for Sunlight Sensor
         if (config.Sunlight_Present):
-            #query = 'INSERT INTO Sunlight(TimeStamp, Visible, IR, UV, UVIndex) VALUES(UTC_TIMESTAMP(), %d, %d, %d, %.3f)' % (SunlightVisible, SunlightIR, SunlightUV, SunlightUVIndex)
-            if (config.MySQL_debug == True):
-                print("query=%s" % query)
+
+            query = 'INSERT INTO Sunlight(TimeStamp, Visible, IR, UV, UVIndex) VALUES(UTC_TIMESTAMP(), %d, %d, %d, %.3f)' % (SunlightVisible, SunlightIR, SunlightUV, SunlightUVIndex)
+
+        if ((config.Sunlight_Present == True) and (config.MySQL_debug == True)):
+            print("query=%s" % query)
             cur.execute(query)
+
         con.commit()
+
     except mdb.Error as e:
         print ("Error %d: %s" % (e.args[0],e.args[1]))
         con.rollback()

@@ -9,9 +9,9 @@ Press Ctrl+C to exit
 """)
 
 try:
-    sensor = bme680.BME680(bme680.I2C_ADDR_PRIMARY)
+     sensor = bme680.BME680(bme680.I2C_ADDR_PRIMARY)
 except IOError:
-    sensor = bme680.BME680(bme680.I2C_ADDR_SECONDARY)
+     sensor = bme680.BME680(bme680.I2C_ADDR_SECONDARY)
 
 print (dir(sensor))
 
@@ -63,9 +63,7 @@ try:
                 sensor.data.humidity)
 
             if sensor.data.heat_stable:
-                print('{0},{1} Ohms'.format(
-                    output,
-                    sensor.data.gas_resistance))
+                print('{0},{1} Ohms'.format(output, sensor.data.gas_resistance))
 
             else:
                 print(output)

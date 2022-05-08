@@ -1,17 +1,18 @@
 
 #
 #
-# configuration file - contains customization for SkyWeather system
+# Baseline configuration file - contains customization for SkyWeather system
 #
-
-# it is a good idea to copy this file into a file called "conflocal.py" and edit that instead of this one.  This file is wiped out if you update SkyWeather.
+# It is a good idea to copy this file into a file called "conflocal.py" and edit that instead of this one.
+#
+# This file is wiped out if you update SkyWeather.
 
 #Debugmodes
 SWDEBUG = False
 DEBUGBLYNK = False
-MySQL_debug = True
+MySQL_debug = False
 WU_debug = False
-AS3935_debug=False
+AS3935_debug = False
 #END
 #check for git
 
@@ -58,8 +59,8 @@ STATIONHARDWARE=""
 
 # WeatherUnderground Station
 WeatherUnderground_Present = True
-WeatherUnderground_StationID = "KTXAUSTI2961"
-WeatherUnderground_StationKey = "z2lLqQoK"
+WeatherUnderground_StationID = "YourStationID"
+WeatherUnderground_StationKey = "YourStationKey"
 
 
 # Blynk configuration
@@ -75,9 +76,10 @@ AS3935_Lightning_Config = [2,1,3,0,3,3]
 
 
 # for barometeric pressure - needed to calculate sealevel equivalent - set your weatherstation elevation here
-BMP280_Altitude_Meters = 242.0
+BMP280_Altitude_Meters = 242.0  #Set this to your location
 
-# device present global variables
+# Device present global variables. Adjust for your own hardware config.
+
 Camera_Present = False
 TCA9545_I2CMux_Present = True
 SunAirPlus_Present = False
@@ -90,8 +92,8 @@ SHT30_Present = True
 AM2315_Present = False
 ADS1015_Present = True
 ADS1115_Present = False
-OLED_Present = False
-OLED_Originally_Present = False
+OLED_Present = True
+OLED_Originally_Present = True
 WXLink_Present = False
 Sunlight_Present = False
 TSL2591_Present = False

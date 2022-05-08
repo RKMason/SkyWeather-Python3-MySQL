@@ -1,64 +1,53 @@
-This is the initial commit of a port of SkyWeather to Python 3
+This is the initial commit of a fork off of the "ve3sjk/SkyWeather-Python-3" port of SkyWeather to Python 3
 
-NOTE: This is a work in progress only the stuff below is working
-further files for solarmax and other available hardware are not
-ported since i don't have that hardware to test on my system.
+NOTE: Just as ve3sjk said, this is a work in progress. The "ve3sjk/SkyWeather-Python-3" Python 3 port supports
+the following list of sensors. My effort here was focussed on reverting the ve3sjk Python 3 code back to use of SwitchDoc
+Labs original MySQL database code. My system also includes the PiWeatherboard V1.1 using a TCA9545 I2C Mux so Python 3 
+support for it is included. 
 
+ The Python 3 port by ve3sjk supports the following list of sensors. My SkyWeather hardware system uses a subset of
+ this list as marked by a * (plus the added TCA9545 I2C Mux) .  
 
-
-If anyone knows how i can make a dump of the current owner
-and permission of my directory i will be happy to include 
-it here. 
-
-I have made additional changes to the original files as follows
-
-- Currently Working Sensors and my development system
+- Currently operating with these sensors:
 
 - as3935
 - veml6070
-- bme680
-- sht30
-- ads1015
-- oled
+- bme680*
+- sht30*
+- ads1015*
+- oled* (hardware attached but not currently working correctly)
 - tsl2591
-- weatherack
+- weatherack*
+- tca9545* 
 
-- System is currently sending data to 
+- Python 3 system is now reverted back to using the original MySQL db.
 
-- internal mysql database - custom
-- so it may not out of the box 
-- support original database
+- Sending weather data to WeatherUnderground is verified by me.
+- The other alternative weather data upload options have not been modified by me. 
 
-It should not take much work to make it work
-i think its a coulple of lines that are commented
-out in SkyWeather.py and some setting in your 
-conflocal.py and it should work. Of course you need
-to import the data base into mysql as well.
+- Two new "device-Present =" config file switches added:
+ 
+- "MP503_Present = "
+- "WatchDog_Present = "
 
--Further Modifications to orig files include
+- Removed these now unused settings in config file
 
-- Added settings in config file
-
-- #MySQL Logging and Password Information
-- enable_MySQL_Logging = False
-- MySQL_Password = "password"
 - MySQL_Address = "x.x.x.x"
 - MySQL_User = "xxxx"
 - MySQL_Database = "xxxx"
 - MySQL_Database2 = "xxxx"
 
-Any reference in other files and MySql 
-calls now use the above settings.
+- I am running SkyWeather under PiOS "Bullseye" on a RPi Zero W.
 
-Added settings in config file
+- To setup your PiOS follow the GitHub "switchdoclabs/SDL_Pi_SkyWeather" Readme instructions, but instead install Python 3
+- versions of each of the PiOS Python support utilities (typically named "Python3-xxxx"). When installing the Adafruit Python
+- device utilities you will see warnings about using deprecated install processes, but the install processes did work.
 
-- MySQL_debug = True
-- WU_debug = False
+ 
 
-Additional debug flags
-- shows MySQL query string
-- shows WeatherUnderground URL String
+- The info below is from ve3sjk. I have not yet tried running SkyWeather as a background service.
 
+*******************************************************************************************************
 Getting it to run as a background service
 
  - change to pigpio-develop directory 
@@ -89,5 +78,5 @@ https://shop.switchdoc.com/products/skyweather-raspberry-pi-based-weather-statio
 
 December 15, 2019: Version 055 - MySQL SolarMAX Fixes
 
-
+*******************************************************************************************************
 
